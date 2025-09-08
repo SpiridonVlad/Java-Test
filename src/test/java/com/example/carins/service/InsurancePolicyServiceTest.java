@@ -102,18 +102,18 @@ class InsurancePolicyServiceTest {
 
     @Test
     void getPolicy_WithValidId_ShouldReturnPolicy() {
-        when(policyRepository.findById(1L)).thenReturn(Optional.of(testPolicy));
+        when(policyRepository.findByIdWithCarAndOwner(1L)).thenReturn(Optional.of(testPolicy));
 
         InsurancePolicy result = policyService.getPolicy(1L);
 
         assertNotNull(result);
         assertEquals(testPolicy.getId(), result.getId());
-        verify(policyRepository).findById(1L);
+        verify(policyRepository).findByIdWithCarAndOwner(1L);
     }
 
     @Test
     void getPolicy_WithInvalidId_ShouldThrowResourceNotFoundException() {
-        when(policyRepository.findById(1L)).thenReturn(Optional.empty());
+        when(policyRepository.findByIdWithCarAndOwner(1L)).thenReturn(Optional.empty());
 
         ResourceNotFoundException exception = assertThrows(
                 ResourceNotFoundException.class,
@@ -121,33 +121,33 @@ class InsurancePolicyServiceTest {
         );
 
         assertEquals("Insurance policy not found with id: 1", exception.getMessage());
-        verify(policyRepository).findById(1L);
+        verify(policyRepository).findByIdWithCarAndOwner(1L);
     }
 
     @Test
     void getAllPolicies_ShouldReturnAllPolicies() {
         List<InsurancePolicy> policies = List.of(testPolicy);
-        when(policyRepository.findAll()).thenReturn(policies);
+        when(policyRepository.findAllWithCarAndOwner()).thenReturn(policies);
 
         List<InsurancePolicy> result = policyService.getAllPolicies();
 
         assertNotNull(result);
         assertEquals(1, result.size());
         assertEquals(testPolicy.getId(), result.get(0).getId());
-        verify(policyRepository).findAll();
+        verify(policyRepository).findAllWithCarAndOwner();
     }
 
     @Test
     void getPoliciesByCarId_ShouldReturnCarPolicies() {
         List<InsurancePolicy> policies = List.of(testPolicy);
-        when(policyRepository.findByCarId(1L)).thenReturn(policies);
+        when(policyRepository.findByCarIdWithCarAndOwner(1L)).thenReturn(policies);
 
         List<InsurancePolicy> result = policyService.getPoliciesByCarId(1L);
 
         assertNotNull(result);
         assertEquals(1, result.size());
         assertEquals(testPolicy.getCar().getId(), result.get(0).getCar().getId());
-        verify(policyRepository).findByCarId(1L);
+        verify(policyRepository).findByCarIdWithCarAndOwner(1L);
     }
 
     @Test
